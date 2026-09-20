@@ -1,0 +1,30 @@
+name: Build Geode Mod
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build Geode Mod
+        uses: geode-sdk/build-geode-mod@main
+        with:
+          sdk: given
+          target: Win64
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: DecorationWorkshopGD
+          path: output/*.geode
