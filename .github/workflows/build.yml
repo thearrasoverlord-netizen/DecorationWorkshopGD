@@ -22,6 +22,7 @@ jobs:
         with:
           sdk: given
           target: Win64
+          bindings-ref: 7f6c2a0c8f0c5c7f4e8c2c6a0f5f4c0d2a5b8e4f
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
