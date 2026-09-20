@@ -15,17 +15,22 @@ class $modify(DecorationWorkshopEditorUI, EditorUI) {
         if (this->getChildByTag(98765))
             return;
 
-        auto panel = CCLayerColor::create(ccc4(125, 82, 45, 255), 520.0f, 320.0f);
+        auto winSize = this->getContentSize();
+
+        auto panel = CCScale9Sprite::createWithSpriteFrameName("GJ_square01-uhd.png");
+        if (!panel)
+            return;
+
         panel->setTag(98765);
-        panel->setPosition(
-            (this->getContentSize().width - panel->getContentSize().width) / 2.0f,
-            (this->getContentSize().height - panel->getContentSize().height) / 2.0f
-        );
+
+        auto panelWidth = winSize.width * 0.82f;
+        auto panelHeight = winSize.height * 0.82f;
+
+        panel->setContentSize({panelWidth, panelHeight});
+        panel->setPosition(winSize.width / 2.0f, winSize.height / 2.0f);
         this->addChild(panel, 100);
 
-        auto closeSprite = CCLabelBMFont::create("X", "bigFont.fnt");
-        closeSprite->setScale(0.65f);
-
+        auto closeSprite = CCSprite::createWithSpriteFrameName("GJ_deleteBtn_001.png");
         auto closeButton = CCMenuItemSpriteExtra::create(
             closeSprite,
             this,
@@ -33,9 +38,9 @@ class $modify(DecorationWorkshopEditorUI, EditorUI) {
         );
 
         auto closeMenu = CCMenu::create();
-        closeMenu->setPosition(24.0f, panel->getContentSize().height - 24.0f);
+        closeMenu->setPosition(24.0f, panelHeight - 24.0f);
         closeMenu->addChild(closeButton);
-        panel->addChild(closeMenu);
+        panel->addChild(closeMenu, 1);
     }
 
     bool init(LevelEditorLayer* editorLayer) {
@@ -48,8 +53,17 @@ class $modify(DecorationWorkshopEditorUI, EditorUI) {
             [this] {
                 std::vector<Ref<CCNode>> nodes;
 
-                auto openSprite = CCLabelBMFont::create("[Open Workshop]", "bigFont.fnt");
-                openSprite->setScale(0.45f);
+                auto openSprite = CCSprite::createWithSpriteFrameName("GJ_longBtn01_001.png");
+                if (!openSprite)
+                    return alpha::editor_tabs::createEditButtonBar(nodes);
+
+                auto label = CCLabelBMFont::create("Open Workshop", "bigFont.fnt");
+                label->setScale(0.55f);
+                label->setPosition(
+                    openSprite->getContentSize().width / 2.0f,
+                    openSprite->getContentSize().height / 2.0f
+                );
+                openSprite->addChild(label);
 
                 auto openButton = CCMenuItemSpriteExtra::create(
                     openSprite,
