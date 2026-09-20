@@ -4,20 +4,21 @@
 using namespace geode::prelude;
 
 class $modify(DecorationWorkshopMenuLayer, MenuLayer) {
+    void onDecorationWorkshopPopup(float) {
+        FLAlertLayer::create(
+            "Decoration Workshop GD",
+            "The mod is working!",
+            "OK"
+        )->show();
+    }
+
     bool init() {
         if (!MenuLayer::init())
             return false;
 
         this->scheduleOnce(
-            [](float) {
-                FLAlertLayer::create(
-                    "Decoration Workshop GD",
-                    "The mod is working!",
-                    "OK"
-                )->show();
-            },
-            0.5f,
-            "decoration-workshop-popup"
+            schedule_selector(DecorationWorkshopMenuLayer::onDecorationWorkshopPopup),
+            0.5f
         );
 
         return true;
