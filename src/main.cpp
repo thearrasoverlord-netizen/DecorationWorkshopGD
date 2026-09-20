@@ -17,7 +17,7 @@ class $modify(DecorationWorkshopEditorUI, EditorUI) {
 
         auto winSize = this->getContentSize();
 
-        auto texture = CCTextureCache::sharedTextureCache()->addImage("GJ_square01-uhd.png");
+        auto texture = CCTextureCache::sharedTextureCache()->addImage("GJ_square01-uhd.png", false);
         if (!texture)
             return;
 
@@ -31,11 +31,12 @@ class $modify(DecorationWorkshopEditorUI, EditorUI) {
         auto panelHeight = winSize.height * 0.82f;
 
         auto textureSize = panel->getContentSize();
-        panel->setScaleX(panelWidth / textureSize.width);
-        panel->setScaleY(panelHeight / textureSize.height);
+        auto panelScaleX = panelWidth / textureSize.width;
+        auto panelScaleY = panelHeight / textureSize.height;
+
+        panel->setScale(0.0f);
         panel->setPosition(winSize.width / 2.0f, winSize.height / 2.0f);
         panel->setAnchorPoint({0.5f, 0.5f});
-        panel->setScale(0.0f);
         this->addChild(panel, 100);
 
         auto closeSprite = CCSprite::createWithSpriteFrameName("GJ_deleteBtn_001.png");
@@ -47,15 +48,15 @@ class $modify(DecorationWorkshopEditorUI, EditorUI) {
 
         auto closeMenu = CCMenu::create();
         closeMenu->setPosition(
-            24.0f / panel->getScaleX(),
-            panel->getContentSize().height - 24.0f / panel->getScaleY()
+            24.0f / panelScaleX,
+            panel->getContentSize().height - 24.0f / panelScaleY
         );
         closeMenu->addChild(closeButton);
         panel->addChild(closeMenu, 1);
 
         panel->runAction(
             CCEaseElasticOut::create(
-                CCScaleTo::create(0.55f, 1.0f),
+                CCScaleTo::create(0.55f, panelScaleX, panelScaleY),
                 0.8f
             )
         );
