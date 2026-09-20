@@ -17,7 +17,11 @@ class $modify(DecorationWorkshopEditorUI, EditorUI) {
 
         auto winSize = this->getContentSize();
 
-        auto panel = CCScale9Sprite::createWithSpriteFrameName("GJ_square01-uhd.png");
+        auto texture = CCTextureCache::sharedTextureCache()->addImage("GJ_square01-uhd.png");
+        if (!texture)
+            return;
+
+        auto panel = CCSprite::createWithTexture(texture);
         if (!panel)
             return;
 
@@ -26,8 +30,12 @@ class $modify(DecorationWorkshopEditorUI, EditorUI) {
         auto panelWidth = winSize.width * 0.82f;
         auto panelHeight = winSize.height * 0.82f;
 
-        panel->setContentSize({panelWidth, panelHeight});
+        auto textureSize = panel->getContentSize();
+        panel->setScaleX(panelWidth / textureSize.width);
+        panel->setScaleY(panelHeight / textureSize.height);
         panel->setPosition(winSize.width / 2.0f, winSize.height / 2.0f);
+        panel->setAnchorPoint({0.5f, 0.5f});
+        panel->setScale(0.0f);
         this->addChild(panel, 100);
 
         auto closeSprite = CCSprite::createWithSpriteFrameName("GJ_deleteBtn_001.png");
@@ -38,9 +46,19 @@ class $modify(DecorationWorkshopEditorUI, EditorUI) {
         );
 
         auto closeMenu = CCMenu::create();
-        closeMenu->setPosition(24.0f, panelHeight - 24.0f);
+        closeMenu->setPosition(
+            24.0f / panel->getScaleX(),
+            panel->getContentSize().height - 24.0f / panel->getScaleY()
+        );
         closeMenu->addChild(closeButton);
         panel->addChild(closeMenu, 1);
+
+        panel->runAction(
+            CCEaseElasticOut::create(
+                CCScaleTo::create(0.55f, 1.0f),
+                0.8f
+            )
+        );
     }
 
     bool init(LevelEditorLayer* editorLayer) {
@@ -53,7 +71,7 @@ class $modify(DecorationWorkshopEditorUI, EditorUI) {
             [this] {
                 std::vector<Ref<CCNode>> nodes;
 
-                auto openSprite = CCSprite::createWithSpriteFrameName("GJ_longBtn01_001.png");
+                auto openSprite = CCSprite::createWithSpriteFrameName("GJ_longBtn03_001.png");
                 if (!openSprite)
                     return alpha::editor_tabs::createEditButtonBar(nodes);
 
