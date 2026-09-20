@@ -4,11 +4,43 @@
 
 using namespace geode::prelude;
 
+class WorkshopBlocker : public CCLayerColor {
+public:
+    static WorkshopBlocker* create(CCSize size) {
+        auto ret = new WorkshopBlocker();
+        if (ret && ret->initWithColor(ccc4(0, 0, 0, 150), size.width, size.height)) {
+            ret->setTouchEnabled(true);
+            ret->setTouchMode(kCCTouchesOneByOne);
+            ret->setTouchPriority(-500);
+            ret->autorelease();
+            return ret;
+        }
+
+        delete ret;
+        return nullptr;
+    }
+
+    bool ccTouchBegan(CCTouch*, CCEvent*) override {
+        return true;
+    }
+};
+
 class $modify(DecorationWorkshopEditorUI, EditorUI) {
     void onWorkshopClose(CCObject*) {
-        if (auto panel = this->getChildByTag(98765)) {
+        if (auto panel = this->getChildByTag(98765))
             panel->removeFromParent();
+
+        if (auto blocker = this->getChildByTag(98766))
+            blocker->removeFromParent();
+    }
+
+    void keyDown(cocos2d::enumKeyCodes key, double timestamp) override {
+        if (key == cocos2d::enumKeyCodes::KEY_Escape && this->getChildByTag(98765)) {
+            this->onWorkshopClose(nullptr);
+            return;
         }
+
+        EditorUI::keyDown(key, timestamp);
     }
 
     void onWorkshopOpen(CCObject*) {
@@ -17,46 +49,51 @@ class $modify(DecorationWorkshopEditorUI, EditorUI) {
 
         auto winSize = this->getContentSize();
 
-        auto texture = CCTextureCache::sharedTextureCache()->addImage("GJ_square01-uhd.png", false);
-        if (!texture)
+        auto blocker = WorkshopBlocker::create(winSize);
+        if (!blocker)
             return;
 
-        auto panel = CCSprite::createWithTexture(texture);
-        if (!panel)
+        blocker->setTag(98766);
+        this->addChild(blocker, 99);
+
+        auto panel = CCScale9Sprite::create("GJ_square01.png", CCRect(0, 0, 80, 80));
+        if (!panel) {
+            blocker->removeFromParent();
             return;
+        }
 
         panel->setTag(98765);
-
-        auto panelWidth = winSize.width * 0.82f;
-        auto panelHeight = winSize.height * 0.82f;
-
-        auto textureSize = panel->getContentSize();
-        auto panelScaleX = panelWidth / textureSize.width;
-        auto panelScaleY = panelHeight / textureSize.height;
-
-        panel->setScale(0.0f);
-        panel->setPosition(ccp(winSize.width / 2.0f, winSize.height / 2.0f));
+        panel->setContentSize({
+            winSize.width * 0.82f,
+            winSize.height * 0.82f
+        });
         panel->setAnchorPoint({0.5f, 0.5f});
+        panel->setPosition(ccp(winSize.width / 2.0f, winSize.height / 2.0f));
+        panel->setScale(0.0f);
         this->addChild(panel, 100);
 
         auto closeSprite = CCSprite::createWithSpriteFrameName("GJ_deleteBtn_001.png");
-        auto closeButton = CCMenuItemSpriteExtra::create(
-            closeSprite,
-            this,
-            menu_selector(DecorationWorkshopEditorUI::onWorkshopClose)
-        );
+        if (closeSprite) {
+            closeSprite->setScale(0.65f);
 
-        auto closeMenu = CCMenu::create();
-        closeMenu->setPosition(
-            24.0f / panelScaleX,
-            panel->getContentSize().height - 24.0f / panelScaleY
-        );
-        closeMenu->addChild(closeButton);
-        panel->addChild(closeMenu, 1);
+            auto closeButton = CCMenuItemSpriteExtra::create(
+                closeSprite,
+                this,
+                menu_selector(DecorationWorkshopEditorUI::onWorkshopClose)
+            );
+
+            auto closeMenu = CCMenu::create();
+            closeMenu->setPosition(
+                panel->getContentSize().width - 24.0f,
+                panel->getContentSize().height - 24.0f
+            );
+            closeMenu->addChild(closeButton);
+            panel->addChild(closeMenu, 1);
+        }
 
         panel->runAction(
             CCEaseElasticOut::create(
-                CCScaleTo::create(0.55f, panelScaleX, panelScaleY),
+                CCScaleTo::create(0.55f, 1.0f),
                 0.8f
             )
         );
