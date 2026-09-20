@@ -21,6 +21,8 @@ class $modify(DecorationWorkshopEditorUI, EditorUI) {
             "decoration-workshop"_spr,
             alpha::editor_tabs::BUILD,
             [this] {
+                std::vector<Ref<CCNode>> nodes;
+
                 auto infoSprite = CCLabelBMFont::create("i", "bigFont.fnt");
                 infoSprite->setScale(0.8f);
 
@@ -30,7 +32,9 @@ class $modify(DecorationWorkshopEditorUI, EditorUI) {
                     menu_selector(DecorationWorkshopEditorUI::onDecorationWorkshopInfo)
                 );
 
-                return alpha::editor_tabs::createEditButtonBar({infoButton});
+                nodes.push_back(infoButton);
+
+                return alpha::editor_tabs::createEditButtonBar(nodes);
             },
             [] {
                 return CCLabelBMFont::create("DW", "bigFont.fnt");
