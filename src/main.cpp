@@ -35,7 +35,7 @@ class $modify(DecorationWorkshopEditorUI, EditorUI) {
         auto panelScaleY = panelHeight / textureSize.height;
 
         panel->setScale(0.0f);
-        panel->setPosition(winSize.width / 2.0f, winSize.height / 2.0f);
+        panel->setPosition(ccp(winSize.width / 2.0f, winSize.height / 2.0f));
         panel->setAnchorPoint({0.5f, 0.5f});
         this->addChild(panel, 100);
 
