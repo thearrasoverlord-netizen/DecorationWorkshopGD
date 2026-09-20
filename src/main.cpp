@@ -84,8 +84,8 @@ class $modify(DecorationWorkshopEditorUI, EditorUI) {
 
             auto closeMenu = CCMenu::create();
             closeMenu->setPosition(
-                panel->getContentSize().width - 24.0f,
-                panel->getContentSize().height - 24.0f
+                0.0f,
+                panel->getContentSize().height
             );
             closeMenu->addChild(closeButton);
             panel->addChild(closeMenu, 1);
