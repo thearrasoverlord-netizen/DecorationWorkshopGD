@@ -1,0 +1,15 @@
+{
+    "geode": "5.4.1",
+    "gd": {
+        "win": "2.2081"
+    },
+    "id": "dani.decoration-workshop-gd",
+    "name": "Decoration Workshop GD",
+    "version": "0.1.0",
+    "developer": "Dani",
+    "description": "An online tool to enhance level decoration, making it better and faster.",
+    "repository": "https://github.com/thearrasoverlord-netizen/DecorationWorkshopGD",
+    "links": {
+        "source": "https://github.com/thearrasoverlord-netizen/DecorationWorkshopGD"
+    }
+}
