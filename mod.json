@@ -9,6 +9,9 @@
     "developer": "Dani",
     "description": "An online tool to enhance level decoration, making it better and faster.",
     "repository": "https://github.com/thearrasoverlord-netizen/DecorationWorkshopGD",
+    "dependencies": {
+        "alphalaneous.editortab_api": ">=2.1.10"
+    },
     "links": {
         "source": "https://github.com/thearrasoverlord-netizen/DecorationWorkshopGD"
     }
