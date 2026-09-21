@@ -146,10 +146,10 @@ class $modify(DecorationWorkshopEditorUI, EditorUI) {
         // Infinite loading screen while the workshop is receiving its pizza.
         auto loadingCircle = CCSprite::create("loadingCircle-uhd.png");
         if (loadingCircle) {
-            loadingCircle->setPosition(
+            loadingCircle->setPosition(ccp(
                 contentSize.width / 2.0f,
                 contentSize.height / 2.0f + 22.0f
-            );
+            ));
             loadingCircle->setScale(0.5f);
             loadingCircle->runAction(
                 CCRepeatForever::create(
