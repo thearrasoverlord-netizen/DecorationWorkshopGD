@@ -88,10 +88,10 @@ class $modify(DecorationWorkshopEditorUI, EditorUI) {
 
             block->setScale(0.24f);
             block->setColor(ccc3(95, 95, 95));
-            block->setPosition(
+            block->setPosition(ccp(
                 32.0f + i * (size.width - 64.0f) / 4.0f,
                 size.height * (i % 2 == 0 ? 0.34f : 0.58f)
-            );
+            ));
             preview->addChild(block, 2);
         }
 
@@ -102,7 +102,7 @@ class $modify(DecorationWorkshopEditorUI, EditorUI) {
         auto icon = CCSprite::createWithSpriteFrameName("GJ_downloadsIcon_001.png");
         if (icon) {
             icon->setScale(0.38f);
-            icon->setPosition(x, y);
+            icon->setPosition(ccp(x, y));
             parent->addChild(icon, 6);
         }
 
@@ -123,7 +123,7 @@ class $modify(DecorationWorkshopEditorUI, EditorUI) {
                 continue;
 
             star->setScale(0.12f);
-            star->setPosition(startX + i * starSpacing, y);
+            star->setPosition(ccp(startX + i * starSpacing, y));
             parent->addChild(star, 6);
         }
 
