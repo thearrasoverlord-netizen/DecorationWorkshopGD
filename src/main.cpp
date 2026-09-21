@@ -143,6 +143,44 @@ class $modify(DecorationWorkshopEditorUI, EditorUI) {
 
         auto contentSize = panel->getContentSize();
 
+        // Infinite loading screen while the workshop is receiving its pizza.
+        auto loadingCircle = CCSprite::create("loadingCircle-uhd.png");
+        if (loadingCircle) {
+            loadingCircle->setPosition(
+                contentSize.width / 2.0f,
+                contentSize.height / 2.0f + 22.0f
+            );
+            loadingCircle->setScale(0.5f);
+            loadingCircle->runAction(
+                CCRepeatForever::create(
+                    CCRotateBy::create(1.0f, 360.0f)
+                )
+            );
+            panel->addChild(loadingCircle, 5);
+        }
+
+        const char* chatFont = "chatFont.fnt";
+        if (CCDirector::sharedDirector()->getContentScaleFactor() > 1.0f &&
+            CCFileUtils::sharedFileUtils()->isFileExist("chatFont-hd.fnt")) {
+            chatFont = "chatFont-hd.fnt";
+        }
+
+        auto loadingText = CCLabelBMFont::create(
+            "Loading... We're trying to receive the pizza",
+            chatFont
+        );
+        if (loadingText) {
+            loadingText->setScale(0.55f);
+            loadingText->setPosition(
+                contentSize.width / 2.0f,
+                contentSize.height / 2.0f - 28.0f
+            );
+            loadingText->limitLabelWidth(contentSize.width * 0.72f, 0.55f, 0.0f);
+            panel->addChild(loadingText, 5);
+        }
+
+        return;
+
         auto title = CCLabelBMFont::create("Decoration Workshop", "bigFont.fnt");
         title->setScale(0.55f);
         title->setPosition(contentSize.width / 2.0f, contentSize.height - 32.0f);
