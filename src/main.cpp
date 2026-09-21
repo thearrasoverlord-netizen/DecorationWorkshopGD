@@ -148,18 +148,18 @@ class $modify(DecorationWorkshopEditorUI, EditorUI) {
         title->setPosition(contentSize.width / 2.0f, contentSize.height - 32.0f);
         panel->addChild(title, 5);
 
+        // Compact template card, matching the intended Smart Templates-style layout.
+        const float cardWidth = contentSize.width * 0.30f;
+        const float cardHeight = contentSize.height * 0.72f;
+        const float cardX = 24.0f + cardWidth / 2.0f;
+        const float cardY = contentSize.height / 2.0f - 5.0f;
+
         auto card = CCScale9Sprite::create("GJ_square01.png", CCRect(0, 0, 80, 80));
         if (!card)
             return;
 
-        card->setContentSize({
-            contentSize.width * 0.68f,
-            contentSize.height * 0.68f
-        });
-        card->setPosition(
-            contentSize.width / 2.0f,
-            contentSize.height / 2.0f - 5.0f
-        );
+        card->setContentSize({cardWidth, cardHeight});
+        card->setPosition(cardX, cardY);
         card->setColor(ccc3(82, 63, 54));
 
         auto cardButton = CCMenuItemSpriteExtra::create(
@@ -170,71 +170,59 @@ class $modify(DecorationWorkshopEditorUI, EditorUI) {
 
         auto menu = CCMenu::create();
         menu->setPosition(0, 0);
-        cardButton->setPosition(
-            contentSize.width / 2.0f,
-            contentSize.height / 2.0f - 5.0f
-        );
+        cardButton->setPosition(cardX, cardY);
         menu->addChild(cardButton);
         panel->addChild(menu, 2);
 
         auto preview = this->createPreview({
-            card->getContentSize().width - 24.0f,
-            card->getContentSize().height * 0.45f
+            cardWidth - 24.0f,
+            cardHeight * 0.42f
         });
         if (preview) {
-            preview->setPosition(
-                cardButton->getPositionX(),
-                cardButton->getPositionY() + 35.0f
-            );
+            preview->setPosition(cardX, cardY + cardHeight * 0.25f);
             panel->addChild(preview, 4);
         }
 
         auto cardTitle = CCLabelBMFont::create("MODERN DECORATION", "bigFont.fnt");
-        cardTitle->setScale(0.38f);
-        cardTitle->setPosition(
-            cardButton->getPositionX(),
-            cardButton->getPositionY() - 18.0f
-        );
+        cardTitle->setScale(0.34f);
+        cardTitle->setPosition(cardX, cardY + 7.0f);
         panel->addChild(cardTitle, 5);
 
         auto author = CCLabelBMFont::create("BY: CREATORNAME", "bigFont.fnt");
-        author->setScale(0.30f);
-        author->setPosition(
-            cardButton->getPositionX(),
-            cardButton->getPositionY() - 38.0f
-        );
+        author->setScale(0.28f);
+        author->setPosition(cardX, cardY - 15.0f);
         panel->addChild(author, 5);
 
         addDownloadInfo(
             panel,
-            cardButton->getPositionX() - card->getContentSize().width / 2.0f + 30.0f,
-            cardButton->getPositionY() - card->getContentSize().height / 2.0f + 32.0f
+            cardX - cardWidth / 2.0f + 30.0f,
+            cardY - cardHeight / 2.0f + 56.0f
         );
 
         addRating(
             panel,
-            cardButton->getPositionX() + card->getContentSize().width / 2.0f - 76.0f,
-            cardButton->getPositionY() - card->getContentSize().height / 2.0f + 32.0f
+            cardX + cardWidth / 2.0f - 76.0f,
+            cardY - cardHeight / 2.0f + 56.0f
         );
 
         auto description = CCScale9Sprite::create("GJ_square01.png", CCRect(0, 0, 80, 80));
         if (description) {
             description->setContentSize({
-                card->getContentSize().width - 32.0f,
-                42.0f
+                cardWidth - 24.0f,
+                38.0f
             });
             description->setColor(ccc3(55, 38, 30));
             description->setOpacity(210);
             description->setPosition(
-                cardButton->getPositionX(),
-                cardButton->getPositionY() - card->getContentSize().height / 2.0f + 75.0f
+                cardX,
+                cardY - cardHeight / 2.0f + 38.0f
             );
 
             auto descText = CCLabelBMFont::create(
                 "Awesome description of my decoration template!",
                 "goldFont.fnt"
             );
-            descText->setScale(0.25f);
+            descText->setScale(0.22f);
             descText->setPosition(
                 description->getContentSize().width / 2.0f,
                 description->getContentSize().height / 2.0f
