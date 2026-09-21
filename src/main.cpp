@@ -80,17 +80,58 @@ class $modify(DecorationWorkshopEditorUI, EditorUI) {
         preview->setColor(ccc3(145, 195, 225));
         preview->setOpacity(255);
 
-        // Simple block decoration preview placeholder.
-        for (int i = 0; i < 7; ++i) {
-            auto block = CCLayerColor::create(ccc4(95, 95, 95, 255), 34.0f, 18.0f);
+        // Placeholder structure made from textured GD panels instead of flat gray rectangles.
+        for (int i = 0; i < 5; ++i) {
+            auto block = CCSprite::createWithSpriteFrameName("GJ_square01.png");
+            if (!block)
+                continue;
+
+            block->setScale(0.24f);
+            block->setColor(ccc3(95, 95, 95));
             block->setPosition(
-                28.0f + i * 38.0f,
-                22.0f + (i % 2) * 30.0f
+                32.0f + i * (size.width - 64.0f) / 4.0f,
+                size.height * (i % 2 == 0 ? 0.34f : 0.58f)
             );
             preview->addChild(block, 2);
         }
 
         return preview;
+    }
+
+    void addDownloadInfo(CCNode* parent, float x, float y) {
+        auto icon = CCSprite::createWithSpriteFrameName("GJ_downloadsIcon_001.png");
+        if (icon) {
+            icon->setScale(0.38f);
+            icon->setPosition(x, y);
+            parent->addChild(icon, 6);
+        }
+
+        auto downloads = CCLabelBMFont::create("1,935", "bigFont.fnt");
+        downloads->setScale(0.30f);
+        downloads->setAnchorPoint({0.0f, 0.5f});
+        downloads->setPosition(x + 12.0f, y);
+        parent->addChild(downloads, 6);
+    }
+
+    void addRating(CCNode* parent, float x, float y) {
+        float starSpacing = 13.0f;
+        float startX = x - starSpacing * 2.0f;
+
+        for (int i = 0; i < 5; ++i) {
+            auto star = CCSprite::createWithSpriteFrameName("GJ_bigStar_noShadow_001.png");
+            if (!star)
+                continue;
+
+            star->setScale(0.12f);
+            star->setPosition(startX + i * starSpacing, y);
+            parent->addChild(star, 6);
+        }
+
+        auto rating = CCLabelBMFont::create("4.5 (276)", "bigFont.fnt");
+        rating->setScale(0.27f);
+        rating->setAnchorPoint({0.0f, 0.5f});
+        rating->setPosition(startX + starSpacing * 2.7f, y);
+        parent->addChild(rating, 6);
     }
 
     void showWorkshopHome() {
@@ -112,14 +153,14 @@ class $modify(DecorationWorkshopEditorUI, EditorUI) {
             return;
 
         card->setContentSize({
-            contentSize.width * 0.72f,
-            contentSize.height * 0.72f
+            contentSize.width * 0.68f,
+            contentSize.height * 0.68f
         });
         card->setPosition(
             contentSize.width / 2.0f,
             contentSize.height / 2.0f - 5.0f
         );
-        card->setColor(ccc3(65, 58, 55));
+        card->setColor(ccc3(82, 63, 54));
 
         auto cardButton = CCMenuItemSpriteExtra::create(
             card,
@@ -164,23 +205,17 @@ class $modify(DecorationWorkshopEditorUI, EditorUI) {
         );
         panel->addChild(author, 5);
 
-        auto downloads = CCLabelBMFont::create("↓ 1,935", "bigFont.fnt");
-        downloads->setScale(0.30f);
-        downloads->setAnchorPoint({0.0f, 0.5f});
-        downloads->setPosition(
-            cardButton->getPositionX() - card->getContentSize().width / 2.0f + 18.0f,
+        addDownloadInfo(
+            panel,
+            cardButton->getPositionX() - card->getContentSize().width / 2.0f + 30.0f,
             cardButton->getPositionY() - card->getContentSize().height / 2.0f + 32.0f
         );
-        panel->addChild(downloads, 5);
 
-        auto rating = CCLabelBMFont::create("★★★★★ 4.5 (276)", "bigFont.fnt");
-        rating->setScale(0.27f);
-        rating->setAnchorPoint({1.0f, 0.5f});
-        rating->setPosition(
-            cardButton->getPositionX() + card->getContentSize().width / 2.0f - 18.0f,
+        addRating(
+            panel,
+            cardButton->getPositionX() + card->getContentSize().width / 2.0f - 76.0f,
             cardButton->getPositionY() - card->getContentSize().height / 2.0f + 32.0f
         );
-        panel->addChild(rating, 5);
 
         auto description = CCScale9Sprite::create("GJ_square01.png", CCRect(0, 0, 80, 80));
         if (description) {
@@ -280,16 +315,8 @@ class $modify(DecorationWorkshopEditorUI, EditorUI) {
             panel->addChild(preview, 3);
         }
 
-        addWorkshopLabel(panel, "Downloads: 1,935", 42.0f, contentSize.height * 0.34f, 0.32f);
-
-        auto rating = CCLabelBMFont::create("★★★★★ 4.5 (276)", "bigFont.fnt");
-        rating->setScale(0.30f);
-        rating->setAnchorPoint({1.0f, 0.5f});
-        rating->setPosition(
-            contentSize.width - 42.0f,
-            contentSize.height * 0.34f
-        );
-        panel->addChild(rating, 5);
+        addDownloadInfo(panel, 58.0f, contentSize.height * 0.34f);
+        addRating(panel, contentSize.width - 86.0f, contentSize.height * 0.34f);
 
         auto description = CCScale9Sprite::create("GJ_square01.png", CCRect(0, 0, 80, 80));
         if (description) {
